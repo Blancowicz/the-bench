@@ -1,0 +1,26 @@
+{
+  "terraform_version": "1.7.0",
+  "environments": {
+    "dev": {
+      "aws_profile": "mycompany-dev",
+      "region": "eu-west-1",
+      "state_bucket": "mycompany-tfstate-dev",
+      "state_key": "dev/terraform.tfstate",
+      "lock_table": "mycompany-tfstate-locks"
+    },
+    "staging": {
+      "aws_profile": "mycompany-staging",
+      "region": "eu-west-1",
+      "state_bucket": "mycompany-tfstate-staging",
+      "state_key": "staging/terraform.tfstate",
+      "lock_table": "mycompany-tfstate-locks"
+    },
+    "production": {
+      "aws_profile": "mycompany-prod",
+      "region": "eu-west-1",
+      "state_bucket": "mycompany-tfstate-prod",
+      "state_key": "production/terraform.tfstate",
+      "lock_table": "mycompany-tfstate-locks"
+    }
+  }
+}

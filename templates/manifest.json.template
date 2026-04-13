@@ -11,7 +11,8 @@
     "architecture": "07-architecture-diagrams",
     "consulting":   "08-consulting",
     "design":       "12-design",
-    "data_model":   "07-architecture-diagrams/data-model.yaml"
+    "data_model":   "07-architecture-diagrams/data-model.yaml",
+    "infra_config": "infra/environments.json"
   },
   "disabled": [
     "05-tasks",

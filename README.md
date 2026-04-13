@@ -17,7 +17,7 @@ and reusable across projects via symlinks.
 ## Repository Structure
 
 ```
-agents/
+the-bench/
   _base.md              # Shared behavior: output format, hierarchy, standards
   _context_loader.md    # Protocol for reading project context
   architect.md
@@ -26,6 +26,10 @@ agents/
   sysops.md
   cybersec.md
   qa.md
+  templates/
+    manifest.json.template
+    environments.json.template
+    SESSION.md.template
 ```
 
 ## How Agents Compose
@@ -63,10 +67,18 @@ ln -s ./agents .claude/agents
 Copy the template and edit paths to match your project's context folder:
 
 ```bash
-cp agents/manifest.json.template context/manifest.json
+cp .claude/agents/templates/manifest.json.template context/manifest.json
 ```
 
-### 4. Reference agents from CLAUDE.md
+### 4. Initialize the session log
+
+```bash
+cp .claude/agents/templates/SESSION.md.template SESSION.md
+```
+
+Update the initial entry date and start logging at the end of each session.
+
+### 5. Reference agents from CLAUDE.md
 
 In your project root `CLAUDE.md`:
 
@@ -99,7 +111,8 @@ in this repo.
     "consulting":   "08-consulting",
     "plan":         "04-plan",
     "design":       "12-design",
-    "data_model":   "07-architecture-diagrams/data-model.yaml"
+    "data_model":   "07-architecture-diagrams/data-model.yaml",
+    "infra_config": "infra/environments.json"
   },
   "disabled": ["05-tasks", "10-recipes"],
   "notes": {
@@ -111,6 +124,41 @@ in this repo.
 
 If `manifest.json` is absent, agents fall back to the default paths
 documented in `_context_loader.md`.
+
+## Infra Environments Config
+
+The SysOps agent resolves Terraform versions and AWS profiles from a per-project
+`environments.json`, located at the path defined by the `infra_config` key in
+the manifest (default: `infra/environments.json`).
+
+Copy the template and edit it to match your project's environments and AWS profiles:
+
+```bash
+cp .claude/agents/templates/environments.json.template infra/environments.json
+```
+
+```json
+{
+  "terraform_version": "1.7.0",
+  "environments": {
+    "dev": {
+      "aws_profile": "mycompany-dev",
+      "region": "eu-west-1",
+      "state_bucket": "mycompany-tfstate-dev",
+      "state_key": "dev/terraform.tfstate",
+      "lock_table": "mycompany-tfstate-locks"
+    },
+    "staging": { "..." },
+    "production": { "..." }
+  }
+}
+```
+
+The SysOps agent will:
+- Run `tfenv use <terraform_version>` before any Terraform command.
+- Prefix all Terraform and AWS CLI commands with `AWS_PROFILE=<profile>`
+  for the target environment.
+- Stop and flag in "Open Questions" if this file is absent or incomplete.
 
 ## Updating Agents
 

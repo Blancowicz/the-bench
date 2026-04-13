@@ -1,0 +1,28 @@
+# Session Log
+
+Cross-session memory for AI agents. Updated at the end of every session
+by any agent. Read at the start of every session before any other context.
+
+## Format
+
+```
+## YYYY-MM-DD
+
+- [AGENT] Note text
+```
+
+Agent identifiers: `[ARCHITECT]` `[BACKEND]` `[FRONTEND]` `[SYSOPS]` `[CYBERSEC]` `[QA]`
+
+Notes should capture:
+- Blockers found and their current status
+- Informal decisions not yet written as ADRs
+- Pending follow-ups for a specific agent or human
+- Anything that would otherwise be lost between sessions
+
+Do not duplicate information already captured in a spec, ADR, or tasks.md.
+
+---
+
+## YYYY-MM-DD
+
+- [ARCHITECT] Project session log initialized.

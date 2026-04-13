@@ -48,7 +48,14 @@ If none: write "None."
 ### Next Steps
 Ordered list of recommended actions after this interaction.
 
-> Agents may add additional sections after "Next Steps" as needed.
+### Session Log
+Append a dated entry to `SESSION.md` in the project root with any information
+relevant for continuity in future sessions: blockers found, decisions made
+informally, pending follow-ups, or anything not yet captured in a spec or ADR.
+Format: `- [AGENT] Note text`
+If nothing worth logging: write "Nothing to log."
+
+> Agents may add additional sections after "Session Log" as needed.
 > Do not remove or reorder the mandatory sections.
 
 ## OpenSpec Awareness
