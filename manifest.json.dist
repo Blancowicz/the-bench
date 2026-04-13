@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "description": "Context directory map for agent consumption. Edit paths to match this project's structure.",
+  "paths": {
+    "contracts":    "00-contracts",
+    "meetings":     "01-meetings",
+    "decisions":    "02-decisions",
+    "plan":         "04-plan",
+    "products":     "09-products",
+    "technology":   "06-technology-ecosystem",
+    "architecture": "07-architecture-diagrams",
+    "consulting":   "08-consulting",
+    "design":       "12-design",
+    "data_model":   "07-architecture-diagrams/data-model.yaml"
+  },
+  "disabled": [
+    "05-tasks",
+    "10-recipes",
+    "11-factories"
+  ],
+  "notes": {
+    "consulting": "Strategic input only. Do not treat as decisions.",
+    "plan":       "Informational. Use for phase validation only.",
+    "disabled":   "These folders are legacy. Ignore their contents."
+  }
+}
