@@ -62,13 +62,15 @@ mkdir -p "$AGENTS_DST" "$COMMANDS_DST" "$CONTEXT_DST" "$INFRA_DST"
 # These are the-bench source files, not user config.
 # ─────────────────────────────────────────────
 info "Installing agents..."
-cp "$BENCH_DIR"/agents/*.md "$AGENTS_DST"/
-cp "$BENCH_DIR"/_base.md "$AGENTS_DST"/_base.md
-cp "$BENCH_DIR"/_context_loader.md "$AGENTS_DST"/_context_loader.md
+for agent in _base _context_loader architect backend frontend sysops cybersec qa; do
+  cp "$BENCH_DIR/agents/${agent}.md" "$AGENTS_DST/${agent}.md"
+done
 success "Agents installed → .claude/agents/"
 
 info "Installing commands..."
-cp "$BENCH_DIR"/commands/*.md "$COMMANDS_DST"/
+for cmd in feature bugfix spec review security-audit; do
+  cp "$BENCH_DIR/commands/${cmd}.md" "$COMMANDS_DST/${cmd}.md"
+done
 success "Commands installed → .claude/commands/"
 
 # ─────────────────────────────────────────────

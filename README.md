@@ -18,14 +18,21 @@ and reusable across projects via symlinks.
 
 ```
 the-bench/
-  _base.md              # Shared behavior: output format, hierarchy, standards
-  _context_loader.md    # Protocol for reading project context
-  architect.md
-  backend.md
-  frontend.md
-  sysops.md
-  cybersec.md
-  qa.md
+  agents/
+    _base.md              # Shared behavior: output format, hierarchy, standards
+    _context_loader.md    # Protocol for reading project context
+    architect.md
+    backend.md
+    frontend.md
+    sysops.md
+    cybersec.md
+    qa.md
+  commands/
+    feature.md
+    bugfix.md
+    spec.md
+    review.md
+    security-audit.md
   templates/
     manifest.json.template
     environments.json.template
@@ -146,10 +153,11 @@ The SysOps agent resolves Terraform versions and AWS profiles from a per-project
 `environments.json`, located at the path defined by the `infra_config` key in
 the manifest (default: `infra/environments.json`).
 
-Copy the template and edit it to match your project's environments and AWS profiles:
+The `install.sh` script copies this template automatically on first install.
+To reset it manually:
 
 ```bash
-cp .claude/agents/templates/environments.json.template infra/environments.json
+cp /tmp/the-bench/templates/environments.json.template infra/environments.json
 ```
 
 ```json
