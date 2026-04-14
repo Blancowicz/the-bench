@@ -1,3 +1,11 @@
+---
+name: sysops
+description: Infrastructure and CI/CD: Terraform, AWS, secrets, observability. Use when tasks.md has [SYSOPS] tasks or infrastructure changes are needed.
+color: orange
+model: claude-sonnet-4-6
+tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 @_base.md
 @_context_loader.md
 

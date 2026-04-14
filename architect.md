@@ -1,3 +1,11 @@
+---
+name: architect
+description: Strategic planning, feature scoping, specs, and ADRs. Use for any new functionality, system design decision, or when no active OpenSpec change exists.
+color: purple
+model: claude-opus-4-6
+tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 @_base.md
 @_context_loader.md
 

@@ -49,36 +49,51 @@ propagate to all agents immediately with no manual sync needed.
 
 ## Project Integration
 
-### 1. Add the repo as a submodule
+### Install
+
+Run this from your project root:
 
 ```bash
-git submodule add git@github.com:your-org/agents.git agents
+curl -fsSL https://raw.githubusercontent.com/tu-org/the-bench/main/install.sh | bash
 ```
 
-### 2. Symlink into your project
+The script will:
+- Install agents → `.claude/agents/`
+- Install commands → `.claude/commands/`
+- Copy templates if not present → `context/manifest.json`, `infra/environments.json`, `SESSION.md`
+- Update `.gitignore` with the right entries
+
+### Upgrade
+
+To pull the latest agents and commands without touching your config files:
 
 ```bash
-# From the project root
-ln -s ./agents .claude/agents
+curl -fsSL https://raw.githubusercontent.com/tu-org/the-bench/main/install.sh | bash -s -- --upgrade
 ```
 
-### 3. Create the context manifest
+Your `manifest.json`, `environments.json`, and `SESSION.md` are never overwritten on upgrade.
 
-Copy the template and edit paths to match your project's context folder:
+### Manual install (alternative)
+
+If you prefer not to pipe curl to bash, clone and run directly:
 
 ```bash
-cp .claude/agents/templates/manifest.json.template context/manifest.json
+git clone git@github.com:tu-org/the-bench.git /tmp/the-bench
+/tmp/the-bench/install.sh
+rm -rf /tmp/the-bench
 ```
 
-### 4. Initialize the session log
+### Post-install steps
 
-```bash
-cp .claude/agents/templates/SESSION.md.template SESSION.md
-```
+After installing, edit the three config files the script created:
 
-Update the initial entry date and start logging at the end of each session.
+1. `context/manifest.json` — map logical keys to your project's context folder structure
+2. `infra/environments.json` — add your AWS profiles and Terraform version
+3. `SESSION.md` — update the initial date entry
 
-### 5. Reference agents from CLAUDE.md
+Then open Claude Code and run `/agents` to verify agents are loaded.
+
+### Reference agents from CLAUDE.md
 
 In your project root `CLAUDE.md`:
 

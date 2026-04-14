@@ -1,3 +1,11 @@
+---
+name: frontend
+description: UI and client-side implementation: components, pages, accessibility, and tests. Use when tasks.md has [FRONTEND] tasks in the active OpenSpec change.
+color: cyan
+model: claude-sonnet-4-6
+tools: Read, Write, Edit, Glob, Grep, Bash
+---
+
 @_base.md
 @_context_loader.md
 
