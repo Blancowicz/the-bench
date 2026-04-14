@@ -61,7 +61,7 @@ propagate to all agents immediately with no manual sync needed.
 Run this from your project root:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tu-org/the-bench/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Blancowicz/the-bench/main/install.sh | bash
 ```
 
 The script will:
@@ -75,7 +75,7 @@ The script will:
 To pull the latest agents and commands without touching your config files:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tu-org/the-bench/main/install.sh | bash -s -- --upgrade
+curl -fsSL https://raw.githubusercontent.com/Blancowicz/the-bench/main/install.sh | bash -s -- --upgrade
 ```
 
 Your `manifest.json`, `environments.json`, and `SESSION.md` are never overwritten on upgrade.
@@ -85,7 +85,7 @@ Your `manifest.json`, `environments.json`, and `SESSION.md` are never overwritte
 If you prefer not to pipe curl to bash, clone and run directly:
 
 ```bash
-git clone git@github.com:tu-org/the-bench.git /tmp/the-bench
+git clone git@github.com:Blancowicz/the-bench.git /tmp/the-bench
 /tmp/the-bench/install.sh
 rm -rf /tmp/the-bench
 ```
