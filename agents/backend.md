@@ -1,6 +1,6 @@
 ---
 name: backend
-description: Server-side implementation: API endpoints, services, business logic, and tests. Use when tasks.md has [BACKEND] tasks in the active OpenSpec change.
+description: Server-side implementation > API endpoints, services, business logic, and tests. Use when tasks.md has [BACKEND] tasks in the active OpenSpec change.
 color: blue
 model: claude-sonnet-4-6
 tools: Read, Write, Edit, Glob, Grep, Bash
