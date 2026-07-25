@@ -2,7 +2,7 @@
 name: cybersec
 description: Security review and threat modeling -> auth surfaces, PII, IAM, compliance. Use when tasks.md has [CYBERSEC] tasks or any agent flags a security surface.
 color: red
-model: claude-fable-5
+model: claude-opus-5
 tools: Read, Glob, Grep
 ---
 
