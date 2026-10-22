@@ -1,7 +1,7 @@
-# agents
+# the-bench
 
 Centralized prompt library for Claude Code agents. Versioned, composable,
-and reusable across projects via symlinks.
+and installed into projects with a single script.
 
 ## Philosophy
 
@@ -13,6 +13,9 @@ and reusable across projects via symlinks.
   and a common context protocol via `_context_loader.md`.
 - **Portability** — projects map their own folder structure to logical roles
   via `context/manifest.json`, decoupling agents from any specific layout.
+- **Stop, don't guess** — the context chain is explicit
+  (`ontology → data model → API contract → feature → spec → code`). When a
+  link is missing or parked, agents raise it instead of filling it in.
 
 ## Repository Structure
 
@@ -37,6 +40,11 @@ the-bench/
     manifest.json.template
     environments.json.template
     SESSION.md.template
+    features/
+      feature.md          # intended behaviour, client language
+      iteration.md        # why a feature changed
+      bugfix.md           # a mismatch between system and feature.md
+  install.sh
 ```
 
 ## How Agents Compose
@@ -65,10 +73,13 @@ curl -fsSL https://raw.githubusercontent.com/Blancowicz/the-bench/main/install.s
 ```
 
 The script will:
-- Install agents → `.claude/agents/`
-- Install commands → `.claude/commands/`
-- Copy templates if not present → `context/manifest.json`, `infra/environments.json`, `SESSION.md`
+- Install agents → `.claude/agents/` (always overwritten)
+- Install commands → `.claude/commands/` (always overwritten)
+- Install feature templates → `.claude/templates/` (always overwritten)
+- Copy config templates if not present → `context/manifest.json`, `infra/environments.json`, `SESSION.md`
 - Update `.gitignore` with the right entries
+
+Use `--project /path/to/project` to install somewhere other than the current directory.
 
 ### Upgrade
 
@@ -116,27 +127,29 @@ In sublayers (e.g. `apps/api/CLAUDE.md`):
 
 ## Context Manifest
 
-Each project must have a `context/manifest.json` that maps logical keys to
-actual folder paths. This is the only file that lives in the project, not
-in this repo.
+Each project has a `context/manifest.json` that maps logical keys to
+actual folder paths. Agents never hardcode folder names.
 
 ```json
 {
-  "version": "1.0",
+  "version": "1.1",
   "paths": {
-    "contracts":    "00-contracts",
-    "meetings":     "01-meetings",
-    "decisions":    "02-decisions",
-    "products":     "09-products",
-    "technology":   "06-technology-ecosystem",
-    "architecture": "07-architecture-diagrams",
-    "consulting":   "08-consulting",
-    "plan":         "04-plan",
-    "design":       "12-design",
-    "data_model":   "07-architecture-diagrams/data-model.yaml",
-    "infra_config": "infra/environments.json"
+    "contracts":     "00-contracts",
+    "meetings":      "01-meetings",
+    "decisions":     "02-decisions",
+    "ontology":      "03-domain/ontology.md",
+    "data_model":    "03-domain/data-model.yaml",
+    "plan":          "04-plan",
+    "products":      "05-product",
+    "api_contracts": "05-product/api",
+    "technology":    "06-technology",
+    "architecture":  "07-architecture",
+    "design":        "08-design",
+    "features":      "09-features",
+    "consulting":    "10-consulting",
+    "infra_config":  "infra/environments.json"
   },
-  "disabled": ["05-tasks", "10-recipes"],
+  "disabled": [],
   "notes": {
     "consulting": "Strategic input only. Do not treat as decisions.",
     "plan": "Informational. Use for phase validation only."
@@ -145,7 +158,52 @@ in this repo.
 ```
 
 If `manifest.json` is absent, agents fall back to the default paths
-documented in `_context_loader.md`.
+documented in `_context_loader.md`. Existing projects with a different
+layout only need to edit the paths; `ontology`, `features`, `api_contracts`
+and `consulting` are optional and agents note their absence as an assumption.
+
+## Ontology and Data Model
+
+Two files, two jobs:
+
+- `ontology` — the explicit agreement on what exists in the domain, written in
+  natural language: classes, attributes, relations as verbs, rules, and a
+  **parked** section for terms that are known but not yet agreed.
+- `data_model` — the ontology crystallized into entities, attributes and keys.
+
+Agents use ontology terms verbatim. A parked term that a task depends on is a
+blocker: the Architect stops and asks instead of inventing a definition. Changing
+a class, relation or rule needs a human conversation and an ADR; adding rows
+does not.
+
+## Features
+
+`features/<slug>/` is the upstream, framework-agnostic record of a feature:
+
+```
+features/
+  start-stop-timer/
+    feature.md                                  # current intended behaviour, client language
+  manual-time-entry/
+    feature.md
+    iteration-2026-11-03-admin-edits-others.md  # why the behaviour changed
+  billable-entries/
+    feature.md
+    bugfix-2026-11-04-default-overrides-entry.md
+```
+
+Rules:
+- `feature.md` describes **what**, never how. It is a living document: an
+  accepted iteration updates it; the iteration file keeps the why.
+- A **bugfix** is a mismatch between the system and `feature.md`. It never
+  changes `feature.md`. If `feature.md` is silent, it is an iteration, not a bug.
+- Frontmatter `entities:` names ontology classes. `status:` moves
+  `proposed → specced → implemented → verified` through `/spec` or `/feature`
+  (Architect), QA sign-off, and `/opsx:archive`.
+- On conflict with `openspec/specs/`, `feature.md` wins and the Architect opens
+  a change.
+
+Templates are installed under `.claude/templates/`.
 
 ## Infra Environments Config
 
@@ -185,17 +243,8 @@ The SysOps agent will:
 
 ## Updating Agents
 
-Since projects consume this repo as a submodule, updates are explicit
-and controlled:
-
-```bash
-# Inside a project — pull latest agents
-git submodule update --remote agents
-
-# Review changes before committing
-git diff agents
-git add agents && git commit -m "chore: update agents to latest"
-```
+Projects hold a copy of the agents, so updates are explicit: run the
+install script with `--upgrade`, review `git diff .claude/`, commit.
 
 ## Agent Roles at a Glance
 
@@ -205,7 +254,7 @@ git add agents && git commit -m "chore: update agents to latest"
 | `backend` | Technical | Task | API, services, data layer, OpenSpec implementation |
 | `frontend` | Technical | Task | UI, components, a11y, OpenSpec implementation |
 | `sysops` | Technical | Task | Terraform, CI/CD, infra, cloud resources |
-| `cybersec` | Technical | Task | Threat review, compliance, security specs |
+| `cybersec` | Technical | Task | Threat review, compliance, security specs (writes only security artifacts) |
 | `qa` | Technical | Task | Test strategy, coverage, spec validation |
 
 ## OpenSpec Integration
@@ -215,9 +264,12 @@ All agents are OpenSpec-aware. The Architect produces change proposals
 `specs/` as their source of truth.
 
 ```
-Architect  →  proposal.md + design.md + specs/ + tasks.md
+Human      →  features/<slug>/feature.md (from meetings, in client language)
+Architect  →  validates entities against ontology + data model + API contract
+              stops on a gap, otherwise proposal.md + design.md + specs/ + tasks.md
 Backend    →  reads tasks.md, implements, reports blockers
-QA         →  reads specs/, validates implementation against scenarios
+QA         →  reads specs/ and feature.md, validates, signs off
+Archive    →  /opsx:archive merges specs, feature becomes `verified`
 ```
 
 ---

@@ -17,20 +17,29 @@ If the current context is large, compact it before starting.
 
 Use the **architect** agent to:
 1. Read `SESSION.md` and the full project context.
-2. Scope the request against `context/products` and `context/contracts`.
-3. Check all `accepted` ADRs for constraints.
-4. Use `/opsx:explore` to investigate the codebase if needed.
-5. Present a summary of:
+2. Resolve the request to a folder under the `features` context path. Read
+   `feature.md` and the most recent open `iteration-*` / `bugfix-*` file.
+   If no folder exists, draft `feature.md` from meetings and product scope
+   and ask for confirmation before continuing.
+3. Validate every class in `entities:` against the ontology and the data
+   model, and the needed endpoints against the API contract. A parked or
+   missing term is a blocker: report it under "Context Gaps" and **stop**.
+   Do not propose a change on top of a gap.
+4. Scope the request against `products` and `contracts`.
+5. Check all `accepted` ADRs for constraints.
+6. Use `/opsx:explore` to investigate the codebase if needed.
+7. Present a summary of:
    - What is in scope and what is not
    - Key constraints from ADRs or contracts
    - Proposed technical approach
    - Open questions requiring human input
-6. Wait for **human confirmation and resolution of open questions**.
-7. Once confirmed, run `/opsx:propose` to produce:
+8. Wait for **human confirmation and resolution of open questions**.
+9. Once confirmed, run `/opsx:propose` to produce:
    - `proposal.md`
    - `design.md`
    - `specs/<domain>/spec.md`
    - `tasks.md` with every task tagged `[AGENT]`
+10. Update the feature frontmatter: `openspec: changes/<change>`, `status: specced`.
 
 ## Step 3 — Cybersec pre-review
 
@@ -55,6 +64,8 @@ Append a dated entry to `SESSION.md`:
 ## Step 5 — Summary
 
 Report back with:
+- Feature folder and status
+- Context gaps found (if any, this is the whole report: nothing else was produced)
 - OpenSpec change name and location
 - Domains for which specs were written
 - ADRs produced (with status)

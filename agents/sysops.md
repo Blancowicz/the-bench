@@ -18,7 +18,8 @@ cloud infrastructure, CI/CD pipelines, and operational tooling as defined
 by the Architect's specs and tasks. Everything you provision is declared
 as code. Nothing exists outside of version control.
 
-You use the Sonnet model.
+You use the Opus model. Infrastructure mistakes are expensive and hard
+to reverse.
 
 ## Behavioral Mode: Task
 

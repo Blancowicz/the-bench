@@ -1,27 +1,28 @@
 {
-  "version": "1.0",
-  "description": "Context directory map for agent consumption. Edit paths to match this project's structure.",
+  "version": "1.1",
+  "description": "Context directory map for agent consumption. Edit paths to match this project's structure. Keys marked optional may be removed.",
   "paths": {
-    "contracts":    "00-contracts",
-    "meetings":     "01-meetings",
-    "decisions":    "02-decisions",
-    "plan":         "04-plan",
-    "products":     "09-products",
-    "technology":   "06-technology-ecosystem",
-    "architecture": "07-architecture-diagrams",
-    "consulting":   "08-consulting",
-    "design":       "12-design",
-    "data_model":   "07-architecture-diagrams/data-model.yaml",
-    "infra_config": "infra/environments.json"
+    "contracts":     "00-contracts",
+    "meetings":      "01-meetings",
+    "decisions":     "02-decisions",
+    "ontology":      "03-domain/ontology.md",
+    "data_model":    "03-domain/data-model.yaml",
+    "plan":          "04-plan",
+    "products":      "05-product",
+    "api_contracts": "05-product/api",
+    "technology":    "06-technology",
+    "architecture":  "07-architecture",
+    "design":        "08-design",
+    "features":      "09-features",
+    "consulting":    "10-consulting",
+    "infra_config":  "infra/environments.json"
   },
-  "disabled": [
-    "05-tasks",
-    "10-recipes",
-    "11-factories"
-  ],
+  "disabled": [],
   "notes": {
     "consulting": "Strategic input only. Do not treat as decisions.",
     "plan":       "Informational. Use for phase validation only.",
-    "disabled":   "These folders are legacy. Ignore their contents."
+    "ontology":   "Agreed vocabulary. Parked items are blockers, not assumptions.",
+    "features":   "feature.md is the current intended behaviour and wins over openspec/specs on conflict.",
+    "disabled":   "Folders listed here are legacy. Ignore their contents."
   }
 }

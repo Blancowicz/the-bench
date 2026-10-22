@@ -72,6 +72,19 @@ Technical agents consume specs as their source of truth.
 The Architect agent produces specs. No technical agent modifies
 `openspec/specs/` directly — changes go through `openspec/changes/`.
 
+## Features Awareness
+
+Upstream of OpenSpec lives the `features` context folder (see
+`_context_loader.md`). `features/<slug>/feature.md` states the intended
+behaviour in client language; specs make it verifiable. The chain is:
+
+```
+ontology → data model → API contract → feature.md → openspec/specs → code
+```
+
+Every spec traces back to a feature. Every feature names ontology classes.
+If any link is missing or parked, the right move is to stop and ask, not to fill it in.
+
 ## Quality Standards
 
 - Code: typed, tested, documented at the function/module boundary.

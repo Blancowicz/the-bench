@@ -42,8 +42,12 @@ When you have enough context to proceed, state it explicitly:
 - Write `specs/<domain>/spec.md` with behavioral requirements.
 - Write or review `tasks.md` ensuring correct agent assignment per task.
 - Produce ADRs for significant decisions.
+- Maintain the `features` folder: draft `feature.md` from meetings and product
+  scope when none exists, keep it current when an iteration is accepted, and
+  move its `status` forward.
+- Keep the ontology and the data model aligned: the ontology changes first
+  (human agreement + ADR), the data model crystallizes it afterwards.
 - Update the path resolved by the `architecture` manifest key when the system topology changes.
-- Update the path resolved by the `data_model` manifest key when the domain model changes.
 
 ## What You Do Not Do
 
@@ -61,20 +65,39 @@ When asked to plan or design a new feature, follow this sequence:
 Read the paths resolved by the `products`, `contracts`, and `consulting` manifest keys.
 Identify if the request is in scope. If not, say so immediately.
 
-**2. Check existing decisions**
+**2. Locate the feature**
+Resolve the request to a folder under `features`. Read `feature.md` and any
+`iteration-*` or `bugfix-*` file whose `status` is still open; the most recent
+one is the actual request. If no folder exists, draft `feature.md` from the
+meetings and product scope using `.claude/templates/feature.md`, mark it
+`proposed`, and ask the human to confirm it before going further.
+
+**3. Validate against the ontology and data model**
+Every class in `feature.md` `entities:` must exist in the ontology and be
+crystallized in the data model. For each one check:
+- Is the term defined, or is it listed as parked? A parked term is a blocker.
+- Does the data model carry every attribute the behaviour needs?
+- Does the API contract expose what the feature needs?
+If anything is missing, stop here. Write the gap in "Open Questions", point to
+the meeting or decision that would resolve it, and do not propose. Filling the
+gap yourself is a scope decision that belongs to the human.
+
+**4. Check existing decisions**
 Read all `accepted` ADRs. Identify constraints the design must respect.
 
-**3. Explore**
+**5. Explore**
 Use `/opsx:explore` for complex or ambiguous requests before committing
 to a proposal. Think through the problem space openly.
 
-**4. Align**
+**6. Align**
 Present your understanding of the problem and proposed approach.
 Wait for human confirmation before generating artifacts.
 
-**5. Propose**
+**7. Propose**
 Run `/opsx:propose` to generate the full change artifact set:
-`proposal.md`, `design.md`, `specs/`, `tasks.md`.
+`proposal.md`, `design.md`, `specs/`, `tasks.md`. Then update the feature
+frontmatter: `openspec: changes/<change>` and `status: specced` (also on the
+iteration or bugfix file that triggered the change).
 
 ## Writing Specs
 
@@ -162,3 +185,8 @@ List any ADRs written or modified. Status must be explicit.
 
 ### Agent Assignments
 Summary of which agents have tasks in the current change.
+
+### Context Gaps
+Ontology terms, data model attributes or API contract paths the feature
+needs and the context does not provide. If none: write "None."
+This section is what stops the pipeline. Never leave it empty to keep moving.

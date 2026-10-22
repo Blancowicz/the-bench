@@ -23,11 +23,19 @@ fix/<kebab-case-slug-derived-from-the-bug-description>
 
 Use the **qa** agent to:
 1. Read `SESSION.md` for any related previous notes.
-2. Reproduce the bug if possible.
-3. Identify the failing spec scenario, if one exists.
-4. If no spec covers this behaviour, flag it as a spec gap to the Architect.
-5. Produce a bug report with:
-   - Spec reference (or gap)
+2. Resolve the bug to a folder under `features`. Read `feature.md`: the
+   expected behaviour is whatever it says, in the client's words.
+3. If a `bugfix-*.md` file with `status: open` already exists, use it as the
+   report. Otherwise create `bugfix-YYYY-MM-DD-slug.md` from
+   `.claude/templates/bugfix.md`.
+4. Reproduce the bug if possible.
+5. Identify the failing spec scenario, if one exists.
+6. Decide what kind of mismatch this is:
+   - `feature.md` says X, the system does Y → **bug**. Continue.
+   - `feature.md` is silent → **not a bug**: it is an iteration. Flag it to
+     the Architect and stop this workflow.
+7. Complete the bug report with:
+   - `feature.md` sentence violated and spec reference (or gap)
    - Severity
    - Responsible agent
    - Steps to reproduce
@@ -37,7 +45,8 @@ Use the **qa** agent to:
 
 If QA flagged a spec gap, use the **architect** agent to:
 1. Decide whether the gap is a missing requirement or an implementation defect.
-2. If missing requirement: produce a delta spec before proceeding.
+2. If missing requirement: produce a delta spec before proceeding and link it
+   from the bugfix file (`openspec:`).
 3. Wait for **human confirmation** before proceeding.
 
 Skip this step if the bug has a clear spec reference.
@@ -64,6 +73,9 @@ to review the fix before proceeding.
 Use the **qa** agent to verify:
 1. The failing scenario now passes.
 2. No regressions in existing specs.
+3. On sign-off, set the bugfix file to `status: fixed` and fill its
+   "Causa raíz" and "Fix" sections. `feature.md` does not change: a bug
+   never alters the intended behaviour.
 
 **Do not proceed if QA withholds sign-off.**
 

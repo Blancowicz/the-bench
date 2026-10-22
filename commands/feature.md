@@ -23,17 +23,27 @@ feature/<kebab-case-slug-derived-from-the-feature-name>
 
 ## Step 3 — Architect: scope and spec
 
-Use the **architect** agent to:
+If a change already exists for this feature (frontmatter `openspec:` set and
+`status: specced`, typically after `/spec`), skip to Step 4.
+
+Otherwise use the **architect** agent to:
 1. Read `SESSION.md` and the full project context.
-2. Scope the feature against `context/products` and `context/contracts`.
-3. Check all `accepted` ADRs for constraints.
-4. Explore with `/opsx:explore` if the request is ambiguous.
-5. Present the proposed approach and wait for **human confirmation**.
-6. Once confirmed, run `/opsx:propose` to produce:
+2. Resolve the request to a folder under `features`; read `feature.md` and the
+   most recent open iteration or bugfix. Draft `feature.md` if missing and
+   ask for confirmation.
+3. Validate `entities:` against the ontology and data model, and endpoints
+   against the API contract. A parked or missing term is a blocker: stop and
+   report it under "Context Gaps".
+4. Scope the feature against `products` and `contracts`.
+5. Check all `accepted` ADRs for constraints.
+6. Explore with `/opsx:explore` if the request is ambiguous.
+7. Present the proposed approach and wait for **human confirmation**.
+8. Once confirmed, run `/opsx:propose` to produce:
    - `proposal.md`
    - `design.md`
    - `specs/<domain>/spec.md`
    - `tasks.md` with every task tagged `[AGENT]`
+9. Update the feature frontmatter: `openspec: changes/<change>`, `status: specced`.
 
 **Do not proceed to Step 4 until the human confirms the spec.**
 
@@ -54,6 +64,8 @@ Use the **qa** agent to:
 1. Validate all spec scenarios have passing tests.
 2. Check for regressions against existing specs.
 3. Produce a sign-off or list of blockers.
+4. On sign-off, set `status: implemented` on the feature (and on the
+   iteration file, if one triggered this change).
 
 **Do not proceed to Step 6 if QA withholds sign-off.**
 
@@ -71,4 +83,5 @@ Report back with:
 - OpenSpec change name
 - Tasks completed per agent
 - QA sign-off status
-- Next steps (e.g. PR, deploy to staging)
+- Feature status
+- Next steps: PR, then `/opsx:archive` (which sets the feature to `verified`)

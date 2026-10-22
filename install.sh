@@ -4,21 +4,23 @@ set -euo pipefail
 # ─────────────────────────────────────────────
 # the-bench install script
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/tu-org/the-bench/main/install.sh | bash
-#   curl -fsSL https://raw.githubusercontent.com/tu-org/the-bench/main/install.sh | bash -s -- --upgrade
-#   ./install.sh [--upgrade] [--project /path/to/project]
+#   curl -fsSL https://raw.githubusercontent.com/Blancowicz/the-bench/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/Blancowicz/the-bench/main/install.sh | bash -s -- --upgrade
+#   ./install.sh [--upgrade] [--project /path/to/project] [--local /path/to/the-bench]
 # ─────────────────────────────────────────────
 
 REPO_URL="git@github.com:Blancowicz/the-bench.git"
 BENCH_DIR="$(mktemp -d)"
 UPGRADE=false
 PROJECT_DIR="${PWD}"
+LOCAL_SRC=""
 
 # ── Parse arguments ───────────────────────────
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --upgrade)   UPGRADE=true; shift ;;
     --project)   PROJECT_DIR="$2"; shift 2 ;;
+    --local)     LOCAL_SRC="$2"; shift 2 ;;
     *)           echo "Unknown argument: $1"; exit 1 ;;
   esac
 done
@@ -43,11 +45,17 @@ trap cleanup EXIT
 [[ -d "$PROJECT_DIR" ]] || error "Project directory not found: $PROJECT_DIR"
 info "Project: $PROJECT_DIR"
 
-# ── Clone the-bench ───────────────────────────
-info "Cloning the-bench..."
-git clone --depth 1 "$REPO_URL" "$BENCH_DIR" --quiet \
-  || error "Failed to clone the-bench. Check your SSH access to $REPO_URL"
-success "Cloned the-bench"
+# ── Clone the-bench (or use a local checkout) ─
+if [[ -n "$LOCAL_SRC" ]]; then
+  [[ -d "$LOCAL_SRC/agents" ]] || error "Not a the-bench checkout: $LOCAL_SRC"
+  cp -R "$LOCAL_SRC"/. "$BENCH_DIR"/
+  success "Using local the-bench at $LOCAL_SRC"
+else
+  info "Cloning the-bench..."
+  git clone --depth 1 "$REPO_URL" "$BENCH_DIR" --quiet \
+    || error "Failed to clone the-bench. Check your SSH access to $REPO_URL"
+  success "Cloned the-bench"
+fi
 
 # ── Directories ───────────────────────────────
 AGENTS_DST="$PROJECT_DIR/.claude/agents"
@@ -72,6 +80,14 @@ for cmd in feature bugfix spec review security-audit; do
   cp "$BENCH_DIR/commands/${cmd}.md" "$COMMANDS_DST/${cmd}.md"
 done
 success "Commands installed → .claude/commands/"
+
+info "Installing feature templates..."
+TEMPLATES_DST="$PROJECT_DIR/.claude/templates"
+mkdir -p "$TEMPLATES_DST"
+for tpl in feature iteration bugfix; do
+  cp "$BENCH_DIR/templates/features/${tpl}.md" "$TEMPLATES_DST/${tpl}.md"
+done
+success "Feature templates installed → .claude/templates/"
 
 # ─────────────────────────────────────────────
 # TEMPLATES — only copy if not present (install)
