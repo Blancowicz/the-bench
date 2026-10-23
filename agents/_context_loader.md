@@ -92,7 +92,7 @@ Rules:
 - Frontmatter `entities:` must name classes from the ontology. Unknown or parked
   entities are a blocker, not an assumption.
 - Frontmatter `status:` is `proposed` → `specced` → `implemented` → `verified`.
-  Only the Architect (`specced`), QA (`implemented`) and `/opsx:archive` (`verified`)
+  Only the Architect (`specced`), QA (`implemented`) and `/archive` (`verified`)
   move it forward.
 
 **Meeting notes**: extract decisions and open questions.

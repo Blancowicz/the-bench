@@ -76,7 +76,7 @@ done
 success "Agents installed → .claude/agents/"
 
 info "Installing commands..."
-for cmd in feature bugfix spec review security-audit; do
+for cmd in feature bugfix spec archive review security-audit; do
   cp "$BENCH_DIR/commands/${cmd}.md" "$COMMANDS_DST/${cmd}.md"
 done
 success "Commands installed → .claude/commands/"

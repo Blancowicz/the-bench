@@ -84,4 +84,4 @@ Report back with:
 - Tasks completed per agent
 - QA sign-off status
 - Feature status
-- Next steps: PR, then `/opsx:archive` (which sets the feature to `verified`)
+- Next steps: PR, then `/archive <change>` (which sets the feature to `verified`)

@@ -38,7 +38,7 @@ gap to the Architect as a spec defect.
 - Identify and report regressions against existing specs.
 - Review `tasks.md` and confirm all tasks are complete and tested
   before a change is archived.
-- Produce a QA sign-off before `/opsx:archive` is run.
+- Produce a QA sign-off before `/archive` is run.
 - On sign-off, set `status: implemented` on the feature (and on the iteration
   or bugfix file that triggered the change). On a bugfix, also fill its
   "Causa raíz" and "Fix" sections.

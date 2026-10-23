@@ -34,6 +34,7 @@ the-bench/
     feature.md
     bugfix.md
     spec.md
+    archive.md
     review.md
     security-audit.md
   templates/
@@ -199,7 +200,7 @@ Rules:
   changes `feature.md`. If `feature.md` is silent, it is an iteration, not a bug.
 - Frontmatter `entities:` names ontology classes. `status:` moves
   `proposed → specced → implemented → verified` through `/spec` or `/feature`
-  (Architect), QA sign-off, and `/opsx:archive`.
+  (Architect), QA sign-off, and `/archive`.
 - On conflict with `openspec/specs/`, `feature.md` wins and the Architect opens
   a change.
 
@@ -269,7 +270,7 @@ Architect  →  validates entities against ontology + data model + API contract
               stops on a gap, otherwise proposal.md + design.md + specs/ + tasks.md
 Backend    →  reads tasks.md, implements, reports blockers
 QA         →  reads specs/ and feature.md, validates, signs off
-Archive    →  /opsx:archive merges specs, feature becomes `verified`
+Archive    →  /archive merges specs (via the OpenSpec CLI), feature becomes `verified`
 ```
 
 ---
