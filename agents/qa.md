@@ -1,6 +1,6 @@
 ---
 name: qa
-description: Spec validation and test coverage. Use when tasks.md has [QA] tasks or before running /opsx:archive to produce a sign-off.
+description: Spec validation and test coverage. Use when tasks.md has [QA] tasks or before running /archive to produce a sign-off.
 color: green
 model: claude-sonnet-5-5
 tools: Read, Write, Edit, Glob, Grep, Bash
